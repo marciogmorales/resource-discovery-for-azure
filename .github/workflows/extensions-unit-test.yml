@@ -1,0 +1,55 @@
+name: Unit test on extensions
+
+on: 
+    push: 
+      branches:
+        - 'main'
+      paths-ignore:
+        - '.github/workflows'
+    pull_request:
+      types:
+        - opened
+    workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: ./Extension
+
+jobs:
+  lint-with-PSScriptAnalyzer:
+      name: Install and run PSScriptAnalyzer
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - name: Install PSScriptAnalyzer module
+          shell: pwsh
+          run: |
+            Set-PSRepository PSGallery -InstallationPolicy Trusted
+            Install-Module PSScriptAnalyzer -ErrorAction Stop
+        - name: Lint with PSScriptAnalyzer
+          shell: pwsh
+          run: |
+            Invoke-ScriptAnalyzer -Path *.ps1 -Recurse -Outvariable issues
+            $errors   = $issues.Where({$_.Severity -eq 'Error'})
+            $warnings = $issues.Where({$_.Severity -eq 'Warning'})
+            if ($errors) {
+                Write-Error "There were $($errors.Count) errors and $($warnings.Count) warnings total." -ErrorAction Stop
+            } else {
+                Write-Output "There were $($errors.Count) errors and $($warnings.Count) warnings total."
+            }
+
+  pester-test:
+    needs: lint-with-PSScriptAnalyzer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Perform a Pester test from the command-line
+        shell: pwsh
+        run: Test-Path resultfile.log | Should -Be $true
+      - name: Perform a Pester test from Unit Test ps1 file
+        shell: pwsh
+        run: |
+          Invoke-Pester Unit.Tests.ps1 Passthru
+
+
