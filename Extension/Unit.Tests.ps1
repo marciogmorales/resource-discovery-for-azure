@@ -1,5 +1,4 @@
 # Import-Module to ensure script functions are available in the Pester tests
-# Replace 'YourScript.ps1' with the actual script filename
 
 Describe 'Metric Processing Script Tests' {
 
@@ -30,7 +29,7 @@ Describe 'Metric Processing Script Tests' {
 
     # Run the script before the tests
     BeforeAll {
-        . "$PSScriptRoot\YourScript.ps1" -Subscriptions $sampleSubscriptions -Resources $sampleResources -Task $sampleTask -File $sampleFile -Metrics $sampleMetrics -TableStyle $sampleTableStyle -ConcurrencyLimit $sampleConcurrencyLimit -FilePath $sampleFilePath
+        . "$PSScriptRoot\Metrics.ps1" -Subscriptions $sampleSubscriptions -Resources $sampleResources -Task $sampleTask -File $sampleFile -Metrics $sampleMetrics -TableStyle $sampleTableStyle -ConcurrencyLimit $sampleConcurrencyLimit -FilePath $sampleFilePath
     }
 
     # Test Metric Definitions for Virtual Machines
