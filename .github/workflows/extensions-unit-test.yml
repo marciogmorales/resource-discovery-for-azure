@@ -47,6 +47,4 @@ jobs:
       - name: Perform a Pester test from Unit Test ps1 file
         shell: pwsh
         run: |
-          Invoke-Pester Unit.Tests.ps1 Passthru
-
-
+          Invoke-Pester Unit.Tests.ps1 -Passthru
