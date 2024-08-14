@@ -1,3 +1,6 @@
+# Import-Module to ensure script functions are available in the Pester tests
+# Replace 'YourScript.ps1' with the actual script filename
+
 Describe 'Metric Processing Script Tests' {
 
     # Sample input data
@@ -25,12 +28,15 @@ Describe 'Metric Processing Script Tests' {
         return [PSCustomObject]@{ Data = [PSCustomObject]@{ Average = @(0.2, 0.3, 0.1) } }
     }
 
+    # Run the script before the tests
+    BeforeAll {
+        . "$PSScriptRoot\YourScript.ps1" -Subscriptions $sampleSubscriptions -Resources $sampleResources -Task $sampleTask -File $sampleFile -Metrics $sampleMetrics -TableStyle $sampleTableStyle -ConcurrencyLimit $sampleConcurrencyLimit -FilePath $sampleFilePath
+    }
+
     # Test Metric Definitions for Virtual Machines
     It 'Processes Virtual Machine Metrics Correctly' {
-        . $PSScriptRoot\YourScript.ps1 -Subscriptions $sampleSubscriptions -Resources $sampleResources -Task $sampleTask -File $sampleFile -Metrics $sampleMetrics -TableStyle $sampleTableStyle -ConcurrencyLimit $sampleConcurrencyLimit -FilePath $sampleFilePath
-        
         # Assert Metric Definitions
-        $metricDefs = (Get-Variable -Name 'metricDefs' -ValueOnly)
+        $metricDefs = Get-Variable -Name 'metricDefs' -ValueOnly
         $metricDefs | Should -Not -BeNullOrEmpty
         $metricDefs.Count | Should -BeGreaterThan 0
 
@@ -42,10 +48,8 @@ Describe 'Metric Processing Script Tests' {
 
     # Test Metric Definitions for Storage Accounts
     It 'Processes Storage Account Metrics Correctly' {
-        . $PSScriptRoot\YourScript.ps1 -Subscriptions $sampleSubscriptions -Resources $sampleResources -Task $sampleTask -File $sampleFile -Metrics $sampleMetrics -TableStyle $sampleTableStyle -ConcurrencyLimit $sampleConcurrencyLimit -FilePath $sampleFilePath
-        
         # Assert Metric Definitions
-        $metricDefs = (Get-Variable -Name 'metricDefs' -ValueOnly)
+        $metricDefs = Get-Variable -Name 'metricDefs' -ValueOnly
         $metricDefs | Should -Not -BeNullOrEmpty
         $metricDefs.Count | Should -BeGreaterThan 0
 
@@ -57,10 +61,8 @@ Describe 'Metric Processing Script Tests' {
 
     # Test Metric Definitions for SQL Databases
     It 'Processes SQL Database Metrics Correctly' {
-        . $PSScriptRoot\YourScript.ps1 -Subscriptions $sampleSubscriptions -Resources $sampleResources -Task $sampleTask -File $sampleFile -Metrics $sampleMetrics -TableStyle $sampleTableStyle -ConcurrencyLimit $sampleConcurrencyLimit -FilePath $sampleFilePath
-
         # Assert Metric Definitions
-        $metricDefs = (Get-Variable -Name 'metricDefs' -ValueOnly)
+        $metricDefs = Get-Variable -Name 'metricDefs' -ValueOnly
         $metricDefs | Should -Not -BeNullOrEmpty
         $metricDefs.Count | Should -BeGreaterThan 0
 
@@ -72,10 +74,8 @@ Describe 'Metric Processing Script Tests' {
 
     # Test Metric Definitions for App Services
     It 'Processes App Service Metrics Correctly' {
-        . $PSScriptRoot\YourScript.ps1 -Subscriptions $sampleSubscriptions -Resources $sampleResources -Task $sampleTask -File $sampleFile -Metrics $sampleMetrics -TableStyle $sampleTableStyle -ConcurrencyLimit $sampleConcurrencyLimit -FilePath $sampleFilePath
-        
         # Assert Metric Definitions
-        $metricDefs = (Get-Variable -Name 'metricDefs' -ValueOnly)
+        $metricDefs = Get-Variable -Name 'metricDefs' -ValueOnly
         $metricDefs | Should -Not -BeNullOrEmpty
         $metricDefs.Count | Should -BeGreaterThan 0
 
